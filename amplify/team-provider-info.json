@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-roomit-dev-47d58-authRole",
+      "UnauthRoleArn": "arn:aws:iam::716510956180:role/amplify-roomit-dev-47d58-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::716510956180:role/amplify-roomit-dev-47d58-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-roomit-dev-47d58-deployment",
+      "UnauthRoleName": "amplify-roomit-dev-47d58-unauthRole",
+      "StackName": "amplify-roomit-dev-47d58",
+      "StackId": "arn:aws:cloudformation:us-west-2:716510956180:stack/amplify-roomit-dev-47d58/f9e9be30-ae65-11ef-929e-0a74be1557a1",
+      "AmplifyAppId": "d2ll95ovpp61bg"
+    },
+    "categories": {
+      "function": {
+        "userapi": {
+          "deploymentBucketName": "amplify-roomit-dev-47d58-deployment",
+          "s3Key": "amplify-builds/userapi-6b3935696763795a4f35-build.zip"
+        }
+      },
+      "api": {
+        "userapistuff": {}
+      }
+    }
+  }
+}

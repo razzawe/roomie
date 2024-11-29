@@ -1,0 +1,43 @@
+{
+  "api": {
+    "userapistuff": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "userapi"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "userapi": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_userapi_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "userapi"
+        }
+      ]
+    },
+    "AMPLIFY_function_userapi_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "userapi"
+        }
+      ]
+    }
+  }
+}
