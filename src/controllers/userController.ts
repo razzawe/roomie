@@ -3,7 +3,9 @@ const prisma = new PrismaClient();
 
 export const getUser = async (req, res) => {
   const { id } = req.query;
-
+  if (!id) {
+    return res.status(400).json({ message: "User ID is required" });
+  }
   const user = await prisma.userProfile.findUnique({
     where: {
       id: parseInt(id),
@@ -21,7 +23,7 @@ export const getUser = async (req, res) => {
 };
 
 export const createUser = async (req, res) => {
-    const { firstName, lastName, profileImage, city, province_state, country } = req.body;
+    const { firstName, lastName, profileImage, city, province_state, country, gender } = req.body;
 
     if (!firstName || !lastName || !city || !country) {
         return res.status(400).json({ message: 'First name, last name, city, and country are required.' });
@@ -53,10 +55,10 @@ export const createUserPreference = async (req, res) => {
 }
 
 export const getUserPreference = async (req, res) => {
-    const { userId } = req.query;
+    const { id } = req.query;
     const userPrefs = await prisma.userPreference.findUnique({
         where: {
-            userId: parseInt(userId)
+            userId: parseInt(id)
         }
     })
     return res.status(200).json(userPrefs)

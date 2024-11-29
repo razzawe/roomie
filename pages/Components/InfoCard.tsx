@@ -1,7 +1,7 @@
 import React, { ReactNode, CSSProperties } from 'react';
 
 interface InfoCardProps {
-  title: string;
+  title: ReactNode;  // Changed from string to ReactNode
   children: ReactNode;
   variant?: 'default' | 'highlighted' | 'subtle';
   className?: string;
@@ -63,7 +63,13 @@ const InfoCard: React.FC<InfoCardProps> = ({
 
   return (
     <div style={styles.card} className={className}>
-      <h3 style={styles.title}>{title}</h3>
+      <div style={styles.title}>
+        {typeof title === 'string' ? (
+          <h3 style={{ margin: 0 }}>{title}</h3>
+        ) : (
+          title
+        )}
+      </div>
       <div style={styles.content}>
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child) && child.type === 'p') {

@@ -1,27 +1,34 @@
 import React from 'react';
 import InfoCard from './InfoCard';
 
+
 interface UserProfile {
+  id: string;
   name: string;
   age: number;
   gender: string;
   profilePic: string;
   hobbies: string[];
   description: string;
+  matchPercentage: number;
 }
 
 interface MainContentProps {
   userProfile: UserProfile;
+  onInterested: (profile: UserProfile) => void;
+  onNotInterested: (profile: UserProfile) => void;
 }
 
-const MainContent: React.FC<MainContentProps> = ({ userProfile }) => {
+const MainContent: React.FC<MainContentProps> = ({ userProfile, onInterested, onNotInterested }) => {
   const defaultProfile: UserProfile = {
+    id: '0',
     name: "John Doe",
     age: 30,
     gender: "Male",
     profilePic: "https://via.placeholder.com/200",
     hobbies: ["Reading", "Hiking", "Photography"],
-    description: "A passionate developer who loves to create and innovate."
+    description: "A passionate developer who loves to create and innovate.",
+    matchPercentage: 10
   };
 
   const profile = userProfile || defaultProfile;
@@ -118,19 +125,41 @@ const MainContent: React.FC<MainContentProps> = ({ userProfile }) => {
           <div style={styles.profileInfo}>
             <InfoCard 
               title={
-                <div style={styles.headerContainer}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem'
+                }}>
                   <span>Basic Information</span>
                   <button 
-                    onClick={handleEditClick} 
-                    style={styles.button}
+                    onClick={() => onInterested(userProfile)} 
+                    style={{
+                      padding: '0.5rem 1rem',
+                      borderRadius: '4px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '0.9rem',
+                      backgroundColor: '#28a745',
+                      color: 'white',
+                      transition: 'background-color 0.2s'
+                    }}
                   >
-                    Edit
+                    Interested
                   </button>
                   <button 
-                    onClick={handleViewClick} 
-                    style={{...styles.button, ...styles.secondaryButton}}
+                    onClick={() => onNotInterested(userProfile)} 
+                    style={{
+                      padding: '0.5rem 1rem',
+                      borderRadius: '4px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: '0.9rem',
+                      backgroundColor: '#dc3545',
+                      color: 'white',
+                      transition: 'background-color 0.2s'
+                    }}
                   >
-                    View
+                    Not Interested
                   </button>
                 </div>
               }

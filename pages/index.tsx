@@ -63,10 +63,24 @@ const myProfile: UserProfile = {
 
 const App: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<UserProfile>(dummyConnections[0]);
+  const [connections, setConnections] = useState<UserProfile[]>([/* your initial connections */]);
+  const [hiddenProfiles, setHiddenProfiles] = useState<Set<string>>(new Set());
 
   const handleLogout = () => {
     console.log('Logging out...');
   };
+
+  const handleInterested = (profile: UserProfile) => {
+    setConnections(prevConnections => {
+      const filteredConnections = prevConnections.filter(c => c.id !== profile.id);
+      return [profile, ...filteredConnections];
+    });
+  };
+
+  const handleNotInterested = (profile: UserProfile) => {
+    setHiddenProfiles(prev => new Set(prev).add(profile.id));
+  };
+  const [prioritizedProfiles, setPrioritizedProfiles] = useState<Set<string>>(new Set());
 
   const styles = {
     container: {
@@ -108,12 +122,19 @@ const App: React.FC = () => {
       <div style={styles.leftSidebar}>
         <ConnectionsList 
           connections={dummyConnections} 
-          onSelectConnection={setSelectedProfile} 
+          onSelectConnection={setSelectedProfile}
+          hiddenProfiles={hiddenProfiles}
+          prioritizedProfiles={prioritizedProfiles}
+          onInterested = {handleInterested}
         />
       </div>
       
       <div style={styles.mainContent}>
-        <MainContent userProfile={selectedProfile} />
+        <MainContent 
+          userProfile={selectedProfile}
+          onNotInterested={handleNotInterested}
+          onInterested={handleInterested}    // Added this prop
+        />
       </div>
       
       <div style={styles.rightSidebar}>

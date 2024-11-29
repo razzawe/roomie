@@ -4,17 +4,33 @@ import { UserProfile } from '../index';
 interface ConnectionsListProps {
     connections: UserProfile[];
     onSelectConnection: (connection: UserProfile) => void;
+    hiddenProfiles: Set<string>;
+    prioritizedProfiles: Set<string>;  // Add this new prop
 }
 
-export const ConnectionsList: React.FC<ConnectionsListProps> = ({ connections, onSelectConnection }) => {
+export const ConnectionsList: React.FC<ConnectionsListProps> = ({ 
+  connections, 
+  onSelectConnection, 
+  hiddenProfiles,
+  prioritizedProfiles 
+}) => {
+  const visibleConnections = connections
+    .filter(connection => !hiddenProfiles.has(connection.id))
+    .sort((a, b) => {
+      // First sort by prioritized status
+      if (prioritizedProfiles.has(a.id) && !prioritizedProfiles.has(b.id)) return -1;
+      if (!prioritizedProfiles.has(a.id) && prioritizedProfiles.has(b.id)) return 1;
+      // Then sort by match percentage
+      return b.matchPercentage - a.matchPercentage;
+    });
   return (
     <div style={{
       backgroundColor: '#f5f5f5',
-      height: '100vh', // Set to full viewport height
+      height: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      position: 'fixed', // Fix the position
-      width: '300px', // Or whatever width you prefer
+      position: 'fixed',
+      width: '300px',
     }}>
       {/* Title Card - Fixed */}
       <div style={{
@@ -44,7 +60,7 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({ connections, o
         padding: '1rem',
         paddingTop: '0',
         flex: 1,
-        minHeight: 0, // Important for Firefox
+        minHeight: 0,
       }}>
         <div style={{
           backgroundColor: 'white',
@@ -53,9 +69,9 @@ export const ConnectionsList: React.FC<ConnectionsListProps> = ({ connections, o
           boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
           height: '100%',
           overflowY: 'auto',
-          maxHeight: 'calc(100vh - 120px)', // Adjust based on your header height
+          maxHeight: 'calc(100vh - 120px)',
         }}>
-          {connections.map(connection => (
+          {visibleConnections.map(connection => (
             <div 
               key={connection.id} 
               onClick={() => onSelectConnection(connection)}
