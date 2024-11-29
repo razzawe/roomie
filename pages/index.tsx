@@ -1,115 +1,129 @@
-import Image from "next/image";
-import localFont from "next/font/local";
+import React, { useState } from 'react';
+import { Header } from './Components/Header';
+import { ConnectionsList } from './Components/LeftSidebar';
+import MainContent from './Components/MainContent';
+import { UserMenu } from './Components/RightSidebar';
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+export interface UserProfile {
+  id: string;
+  name: string;
+  age: number;
+  gender: string;
+  profilePic: string;
+  matchPercentage: number;
+  hobbies: string[];
+  description: string;
+}
 
-export default function Home() {
+const dummyConnections: UserProfile[] = [
+  {
+    id: '1',
+    name: 'David Chen',
+    age: 18,
+    gender: 'Male',
+    profilePic: 'https://media.licdn.com/dms/image/v2/D5603AQEy2s4qo4qVuQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1726682064026?e=1738195200&v=beta&t=aLT_jr8AH9Ljnmshy4y6TwPHNeYM8hBMiWS0yc4fr3s',
+    matchPercentage: 85,
+    hobbies: ['Making Keyboards', 'Stargazing', 'OS fiddling'],
+    description: "Hey! I'm David! I'm a first year Computer Science Student at UTSC."
+  },
+  {
+    id: '2',
+    name: 'Rami Al-Azzawe',
+    age: 20,
+    gender: 'Male',
+    profilePic: 'https://media.licdn.com/dms/image/v2/D4E03AQHTfiHMAFffmg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1721677026566?e=1738195200&v=beta&t=i_NdUvMUumBNE8msGtD5eHyvfDPfzGHXEb9QdfgV_Fk',
+    matchPercentage: 92,
+    hobbies: ['Guitar', 'Video Games', 'Coding'],
+    description: "Professional Discord Mod, and coding extraordinaire. I'm a second year Comp Sci\
+    student at UTSC and am currently taking all of my classes at UTSG"
+  },
+  {
+    id: '3',
+    name: 'Eshan Sankar',
+    age: 19,
+    gender: 'Male',
+    matchPercentage: 22,
+    profilePic: 'https://media.licdn.com/dms/image/v2/D5603AQGzslAZ4iQ3gg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1706038636193?e=1738195200&v=beta&t=LAPI3o1ObJkOMeP9VdeDf6Td5R6poxWa0KcyjVM9m2A',
+    hobbies: ['LinkedIn', 'Minecraft Speedrunning', 'Cooking'],
+    description: "Yo, nice to meet you, I'm Eshan. I'm a Sophmore at UTSG studying EngSci. I'm also\
+    intersted in Comp Sci, but I like Tinkering."
+  },
+];
+
+const myProfile: UserProfile = {
+  id: '999',
+  name: "Bentley",
+  age: 18,
+  gender: 'Male',
+  profilePic: "https://media.licdn.com/dms/image/v2/D4E03AQGgOnj_MjwvcQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1732903042843?e=1738195200&v=beta&t=5OxYLw1Sq2RChFmNI-hpJU7fAom6_Nk3Qj2Au1P1inI",
+  matchPercentage: 100,
+  hobbies: ['Piano', 'Hockey', 'Music'],
+  description: "Hey, I'm Bentley. I'm a first year Comp Sci student at UTSC."
+}
+
+const App: React.FC = () => {
+  const [selectedProfile, setSelectedProfile] = useState<UserProfile>(dummyConnections[0]);
+
+  const handleLogout = () => {
+    console.log('Logging out...');
+  };
+
+  const styles = {
+    container: {
+      display: 'grid',
+      gridTemplateColumns: '250px 1fr 250px',
+      gridTemplateRows: '80px 1fr',
+      height: '100vh',
+      overflow: 'hidden'
+    },
+    header: {
+      gridColumn: '1 / span 3',
+      gridRow: '1',
+      borderBottom: '1px solid #eee'
+    },
+    leftSidebar: {
+      gridColumn: '1',
+      gridRow: '2',
+      borderRight: '1px solid #eee',
+      overflow: 'auto'
+    },
+    mainContent: {
+      gridColumn: '2',
+      gridRow: '2',
+      overflow: 'auto'
+    },
+    rightSidebar: {
+      gridColumn: '3',
+      gridRow: '2',
+      borderLeft: '1px solid #eee'
+    }
+  };
+
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div style={styles.container}>
+      <div style={styles.header}>
+        <Header logoSrc="logo-placeholder.png" />
+      </div>
+      
+      <div style={styles.leftSidebar}>
+        <ConnectionsList 
+          connections={dummyConnections} 
+          onSelectConnection={setSelectedProfile} 
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+      
+      <div style={styles.mainContent}>
+        <MainContent userProfile={selectedProfile} />
+      </div>
+      
+      <div style={styles.rightSidebar}>
+        <UserMenu 
+          userProfilePic="https://media.licdn.com/dms/image/v2/D4E03AQGgOnj_MjwvcQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1732903042843?e=1738195200&v=beta&t=5OxYLw1Sq2RChFmNI-hpJU7fAom6_Nk3Qj2Au1P1inI"
+          onLogout={handleLogout}
+        />
+      </div>
     </div>
   );
-}
+};
+
+export default App;
